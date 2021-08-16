@@ -1,0 +1,26 @@
+name: "web_app"
+mode: "dev"
+version: "1.0"
+port: 8080
+start_time: "2021-08-06"
+machine_id: 1
+log:
+  level: "debug"
+  filename: "web_app.log"
+  max_size: 200
+  max_age: 30
+  max_backups: 7
+mysql:
+  host: "127.0.0.1"
+  port: 13306
+  user: "root"
+  password: "123456"
+  database: "bluebell"
+  max_open_conn: 20
+  max_idle_conn: 20
+redis:
+  host: "127.0.0.1"
+  port: 16379
+  password: ""
+  db: 0
+  pool_size: 100
