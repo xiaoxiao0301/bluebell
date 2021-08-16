@@ -4,9 +4,12 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"go_web/web_app/dao/mysql"
+	"go_web/web_app/dao/redis"
 	"go_web/web_app/dict"
 	"go_web/web_app/models"
 	"go_web/web_app/pkg/snowflake"
+
+	"github.com/gin-gonic/gin"
 
 	"go.uber.org/zap"
 )
@@ -50,7 +53,29 @@ func (service *UserService) LoginUser(userParam *models.ParamLogin) (userinfo *m
 	if encryptPassword(userParam.Password) != userinfo.Password {
 		return nil, dict.ErrorUserNameOrPassword
 	}
+
+	// 将登陆用户信息存储到缓存表方便查询信息
+	err = redis.SaveUser(userinfo)
+	if err != nil {
+		return nil, err
+	}
+
 	return userinfo, nil
+}
+
+// GetLoginUserId 从context获取登陆用户ID
+func (service *UserService) GetLoginUserId(ctx *gin.Context) (userId int64, err error) {
+	v, ok := ctx.Get(dict.ContextUserIdKey)
+	if !ok {
+		err = dict.ErrorNeedLogin
+		return
+	}
+	userId, ok = v.(int64)
+	if !ok {
+		err = dict.ErrorNeedLogin
+		return
+	}
+	return
 }
 
 // encryptPassword 密码进行md5加密

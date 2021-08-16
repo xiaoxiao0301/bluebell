@@ -23,14 +23,20 @@ type ParamRefreshToken struct {
 	RefreshToken string `json:"refresh_token" binding:"required"`
 }
 
+// ParamCategory 创建分类请求参数
+type ParamCategory struct {
+	CategoryName string `json:"category_name" binding:"required"`
+	Introduction string `json:"introduction" binding:"required"`
+}
+
 // ParamPost 创建帖子请求参数
 type ParamPost struct {
 	Id         int64  `json:"post_id"`
 	AuthorId   int64  `json:"author_id"`
-	CategoryId int64  `json:"category_id" binding:"required"`
+	CategoryId int64  `json:"category_id,string" binding:"required"`
 	Status     int32  `json:"status"`
 	Title      string `json:"title" binding:"required"`
-	Context    string `json:"context" binding:"required"`
+	Content    string `json:"content" binding:"required"`
 }
 
 // SignUpParamStructLevelValidation 自定义SignUpParam结构体校验函数
