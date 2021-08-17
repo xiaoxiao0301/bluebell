@@ -30,3 +30,16 @@ func GetPost(id int64) (post *models.PostModel, err error) {
 	}
 	return
 }
+
+// 获取帖子列表
+func GetPosts(param *models.ParamPage) (posts []*models.PostModel, err error) {
+	sqlStr := `select * from post order by created_time desc limit ?,?`
+	offset := calculatePageAndOffset(param.Page, param.Size)
+	err = db.Select(&posts, sqlStr, offset, param.Size)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			err = dict.ErrorNotQueryResult
+		}
+	}
+	return
+}

@@ -64,3 +64,29 @@ func PostShow(ctx *gin.Context) {
 	}
 	ReturnOk(ctx, post)
 }
+
+// PostIndex 帖子列表
+func PostIndex(ctx *gin.Context) {
+	var param models.ParamPage
+	if err := ctx.ShouldBindQuery(&param); err != nil {
+		zap.L().Error("PostIndex with invalid param, err:", zap.Error(err))
+		errs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ReturnErr(ctx, dict.CodeInvalidParam)
+			return
+		}
+		ReturnErrWithMessage(ctx, dict.CodeInvalidParam, models.RemoveTopStruct(errs.Translate(models.Trans)))
+		return
+	}
+	posts, err := PostService.GetPostList(&param)
+	if err != nil {
+		if err == dict.ErrorNotQueryResult {
+			ReturnOk(ctx, nil)
+			return
+		}
+		zap.L().Error("PostService.GetPostList err:", zap.Error(err))
+		ReturnErr(ctx, dict.CodeNetWorkBusy)
+		return
+	}
+	ReturnOk(ctx, posts)
+}

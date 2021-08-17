@@ -40,8 +40,10 @@ func SetUp() *gin.Engine {
 	ar := r.Group("/")
 	ar.Use(middleware.AuthUserToken())
 	{
+		// 帖子相关
 		ar.POST("post", controller.PostStore)
 		ar.GET("post/:id", controller.PostShow)
+		ar.GET("posts", controller.PostIndex)
 	}
 	r.NoRoute(func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{

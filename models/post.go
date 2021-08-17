@@ -14,3 +14,10 @@ type PostModel struct {
 	CreatedTime LocalTime `json:"created_time" db:"created_time"`
 	UpdatedTime LocalTime `json:"updated_time" db:"updated_time"`
 }
+
+// PostListDetail 帖子列表详情
+type PostListDetail struct {
+	*UserModel     `json:"user"`
+	*PostModel     `json:"post"`
+	*CategoryModel `json:"category"`
+}

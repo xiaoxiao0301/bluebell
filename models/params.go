@@ -39,6 +39,11 @@ type ParamPost struct {
 	Content    string `json:"content" binding:"required"`
 }
 
+type ParamPage struct {
+	Page int `json:"page" form:"page" binding:"required"` // 当前页码
+	Size int `json:"size" form:"size" binding:"required"` // 每页个数
+}
+
 // SignUpParamStructLevelValidation 自定义SignUpParam结构体校验函数
 func SignUpParamStructLevelValidation(sl validator.StructLevel) {
 	su := sl.Current().Interface().(ParamSignUp)
