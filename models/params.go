@@ -39,9 +39,16 @@ type ParamPost struct {
 	Content    string `json:"content" binding:"required"`
 }
 
+// ParamPage 列表分页请求参数
 type ParamPage struct {
 	Page int `json:"page" form:"page" binding:"required"` // 当前页码
 	Size int `json:"size" form:"size" binding:"required"` // 每页个数
+}
+
+// ParamVote 帖子投票请求参数
+type ParamVote struct {
+	PostId int64 `json:"post_id,string" binding:"required"`            // 投票的帖子id
+	Value  *int8 `json:"value,string" binding:"required,oneof=-1 0 1"` // 投票结果， 1 赞成 0 取消 -1 反对
 }
 
 // SignUpParamStructLevelValidation 自定义SignUpParam结构体校验函数

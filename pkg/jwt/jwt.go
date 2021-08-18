@@ -1,7 +1,6 @@
 package jwt
 
 import (
-	"fmt"
 	"go_web/web_app/dict"
 	"time"
 
@@ -72,13 +71,10 @@ func RefreshToken(accessToken, refreshToken string) (newAccessToken, newRefreshT
 	var authClaims *TokenAuthClaims
 	authClaims = new(TokenAuthClaims)
 	_, err = jwt.ParseWithClaims(accessToken, authClaims, keyFunc)
-	fmt.Println("tokenClaims:", authClaims)
 	if err != nil {
 		v, _ := err.(*jwt.ValidationError)
 		// access_token是过期错误且refresh_token没有过期就新创建一个access_token和refresh_token
-		fmt.Println("token-middle-err:", v.Errors)
 		if v.Errors == jwt.ValidationErrorExpired {
-			fmt.Println(authClaims.UserId, authClaims.Username)
 			return CreateToken(authClaims.UserId, authClaims.Username)
 		}
 		return

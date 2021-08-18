@@ -56,3 +56,18 @@ func (p *PostService) GetPostList(param *models.ParamPage) (data []*models.PostL
 	}
 	return
 }
+
+// VotePost 给帖子投票
+func (p *PostService) VotePost(param *models.ParamVote, userId int64) (err error) {
+	// 本次投票的结果值
+	newValue := *param.Value
+	// 不能重复投赞同票
+	postIdStr := strconv.Itoa(int(param.PostId))
+	userIdStr := strconv.Itoa(int(userId))
+	// 原来投票的值
+	ov, err := redis.GetUserHasVoted(postIdStr, userIdStr)
+	if err != nil {
+		return err
+	}
+	return VoteHandler(userIdStr, postIdStr, ov, newValue)
+}

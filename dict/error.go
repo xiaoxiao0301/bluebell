@@ -9,4 +9,6 @@ var (
 	ErrorUserNameOrPassword = errors.New("用户名或密码错误")
 	ErrorAccessTokenValid   = errors.New("token有效")
 	ErrorNotQueryResult     = errors.New("无查询结果")
+	ErrorVoteEqualValue     = errors.New("不能投重复票")
+	ErrorVoteTimeExpires    = errors.New("投票时间已过")
 )

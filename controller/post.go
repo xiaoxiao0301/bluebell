@@ -90,3 +90,42 @@ func PostIndex(ctx *gin.Context) {
 	}
 	ReturnOk(ctx, posts)
 }
+
+// PostVoteStore 帖子投票
+func PostVoteStore(ctx *gin.Context) {
+	var param models.ParamVote
+	if err := ctx.ShouldBindJSON(&param); err != nil {
+		zap.L().Error("PostVoteStore with invalid param", zap.Error(err))
+		errs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ReturnErr(ctx, dict.CodeInvalidParam)
+			return
+		}
+		ReturnErrWithMessage(ctx, dict.CodeInvalidParam, models.RemoveTopStruct(errs.Translate(models.Trans)))
+		return
+	}
+
+	userId, err := UserServices.GetLoginUserId(ctx)
+	if err != nil {
+		ReturnErr(ctx, dict.CodeNeedLogin)
+		return
+	}
+
+	err = PostService.VotePost(&param, userId)
+	if err != nil {
+		// 投了相同值得票
+		if err == dict.ErrorVoteEqualValue {
+			ReturnErr(ctx, dict.CodeVotedEqualResult)
+			return
+		}
+		// 投票时间过了
+		if err == dict.ErrorVoteTimeExpires {
+			ReturnErr(ctx, dict.CodeVoteTimeExpires)
+			return
+		}
+		zap.L().Error("PostService.VotePost err:", zap.Error(err))
+		ReturnErr(ctx, dict.CodeNetWorkBusy)
+		return
+	}
+	ReturnOk(ctx, nil)
+}

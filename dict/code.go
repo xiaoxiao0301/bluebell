@@ -15,6 +15,8 @@ const (
 	CodeInvalidRefreshToken
 	CodeValidAccessToken
 	CodeNotQueryResult
+	CodeVotedEqualResult
+	CodeVoteTimeExpires
 )
 
 var codeText = map[ResponseCode]string{
@@ -30,6 +32,8 @@ var codeText = map[ResponseCode]string{
 	CodeInvalidRefreshToken: "无效的refresh_token",
 	CodeValidAccessToken:    "access_token未过期",
 	CodeNotQueryResult:      "暂无数据",
+	CodeVotedEqualResult:    "不能投重复票",
+	CodeVoteTimeExpires:     "投票时间已过",
 }
 
 // Message 返回错误码对应的文字信息

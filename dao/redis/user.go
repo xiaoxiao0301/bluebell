@@ -11,6 +11,7 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
+// SaveUser 将用户信息存储到缓存中
 func SaveUser(user *models.UserModel) (err error) {
 	userJson, _ := json.Marshal(user)
 	ctx := context.Background()
@@ -18,6 +19,7 @@ func SaveUser(user *models.UserModel) (err error) {
 	return rdb.Set(ctx, dict.GetSaveUserKey(idStr), userJson, 0).Err()
 }
 
+// GetUser 从缓存中获取用户信息
 func GetUser(id string) (user *models.UserModel, err error) {
 	ctx := context.Background()
 	data, err := rdb.Get(ctx, dict.GetSaveUserKey(id)).Result()

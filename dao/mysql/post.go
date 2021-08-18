@@ -5,20 +5,28 @@ import (
 	"go_web/web_app/dao/redis"
 	"go_web/web_app/dict"
 	"go_web/web_app/models"
+	"strconv"
 )
 
-// 存储帖子
+// SavePost 存储帖子
 func SavePost(param *models.ParamPost) (err error) {
 	sqlStr := `insert into post(post_id, title, content, author_id, category_id) values(?, ?, ?, ?, ?)`
 	_, err = db.Exec(sqlStr, param.Id, param.Title, param.Content, param.AuthorId, param.CategoryId)
 	if err == nil {
 		post, _ := GetPost(param.Id)
-		return redis.SavePostTime(param.Id, post.CreatedTime.Unix())
+		categoryIdStr := strconv.Itoa(int(post.CategoryId))
+		err = redis.SavePostTime(param.Id, post.CreatedTime.Unix())
+		if err == nil {
+			err = redis.SavePostScore(param.Id, post.CreatedTime.Unix())
+			if err == nil {
+				return redis.SaveCategoryPostCounts(categoryIdStr, post.PostId)
+			}
+		}
 	}
 	return
 }
 
-// 获取帖子详情
+// GetPost 获取帖子详情
 func GetPost(id int64) (post *models.PostModel, err error) {
 	sqlStr := `select * from post where post_id = ?`
 	post = new(models.PostModel)
@@ -31,7 +39,7 @@ func GetPost(id int64) (post *models.PostModel, err error) {
 	return
 }
 
-// 获取帖子列表
+// GetPosts 获取帖子列表
 func GetPosts(param *models.ParamPage) (posts []*models.PostModel, err error) {
 	sqlStr := `select * from post order by created_time desc limit ?,?`
 	offset := calculatePageAndOffset(param.Page, param.Size)

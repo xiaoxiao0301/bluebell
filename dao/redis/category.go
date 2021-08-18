@@ -33,3 +33,9 @@ func GetCategoryDetail(categoryId string) (category *models.CategoryModel, err e
 	}
 	return
 }
+
+// SaveCategoryPostCounts 统计分类下帖子的数量
+func SaveCategoryPostCounts(categoryId string, postId int64) error {
+	ctx := context.Background()
+	return rdb.SAdd(ctx, dict.GetSaveCategoryPostsCountKey(categoryId), postId).Err()
+}

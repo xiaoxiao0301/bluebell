@@ -13,6 +13,7 @@ import (
 
 var db *sqlx.DB
 
+// Init 连接数据库
 func Init(mysqlConf *conf.MysqlConfig) (err error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		mysqlConf.User,
@@ -32,6 +33,7 @@ func Init(mysqlConf *conf.MysqlConfig) (err error) {
 	return
 }
 
+// Close 关闭连接
 func Close() {
 	_ = db.Close()
 }

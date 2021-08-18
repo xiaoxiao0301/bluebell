@@ -2,7 +2,6 @@ package controller
 
 import (
 	"errors"
-	"fmt"
 	"go_web/web_app/dict"
 	"go_web/web_app/models"
 	"go_web/web_app/services"
@@ -29,8 +28,6 @@ func RefreshTokenHandler(ctx *gin.Context) {
 		return
 	}
 	accessToken, refreshToken, err := tokenService.RefreshToken(param.AccessToken, param.RefreshToken)
-	fmt.Println(accessToken)
-	fmt.Println(refreshToken)
 	if err != nil {
 		if errors.Is(err, dict.ErrorAccessTokenValid) {
 			ReturnErr(ctx, dict.CodeValidAccessToken)

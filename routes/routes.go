@@ -44,6 +44,7 @@ func SetUp() *gin.Engine {
 		ar.POST("post", controller.PostStore)
 		ar.GET("post/:id", controller.PostShow)
 		ar.GET("posts", controller.PostIndex)
+		ar.POST("post/vote", controller.PostVoteStore)
 	}
 	r.NoRoute(func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
