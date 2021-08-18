@@ -6,6 +6,9 @@ import (
 	"go_web/web_app/dict"
 	"go_web/web_app/models"
 	"strconv"
+	"strings"
+
+	"github.com/jmoiron/sqlx"
 )
 
 // SavePost 存储帖子
@@ -49,5 +52,18 @@ func GetPosts(param *models.ParamPage) (posts []*models.PostModel, err error) {
 			err = dict.ErrorNotQueryResult
 		}
 	}
+	return
+}
+
+// GetPostsListByIds 根据帖子ids获取帖子详情
+func GetPostsListByIds(ids []string) (posts []*models.PostModel, err error) {
+	sqlStr := `select * from post where post_id in (?) order by FIND_IN_SET(post_id, ?)`
+	query, args, err := sqlx.In(sqlStr, ids, strings.Join(ids, ","))
+	if err != nil {
+		return
+	}
+	// sqlx.In 返回带 `?` bindVar的查询语句, 我们使用Rebind()重新绑定它
+	query = db.Rebind(query)
+	err = db.Select(&posts, query, args...)
 	return
 }

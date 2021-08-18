@@ -45,6 +45,9 @@ func SetUp() *gin.Engine {
 		ar.GET("post/:id", controller.PostShow)
 		ar.GET("posts", controller.PostIndex)
 		ar.POST("post/vote", controller.PostVoteStore)
+		// 新的帖子接口可以根据参数 order=time or score 来排序
+		ar.GET("v2/posts", controller.NewPostsIndex)
+
 	}
 	r.NoRoute(func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{

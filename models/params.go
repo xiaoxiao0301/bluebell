@@ -51,6 +51,14 @@ type ParamVote struct {
 	Value  *int8 `json:"value,string" binding:"required,oneof=-1 0 1"` // 投票结果， 1 赞成 0 取消 -1 反对
 }
 
+// ParamNewPost 新版帖子列表接口
+type ParamNewPostList struct {
+	Order string `form:"order" binding:"required,oneof=time score"` // 按照时间或者分数排序
+	Sorts string `form:"sorts" binding:"required,oneof=asc desc"`   // 升序还是降序 asc 升序 desc 降序
+	Page  int    `form:"page" form:"page" binding:"required"`       // 当前页码
+	Size  int    `form:"size" form:"size" binding:"required"`       // 每页个数
+}
+
 // SignUpParamStructLevelValidation 自定义SignUpParam结构体校验函数
 func SignUpParamStructLevelValidation(sl validator.StructLevel) {
 	su := sl.Current().Interface().(ParamSignUp)

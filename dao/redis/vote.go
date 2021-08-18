@@ -40,3 +40,29 @@ func IncrPostScore(postId string, score float64) error {
 	ctx := context.Background()
 	return rdb.ZIncrBy(ctx, dict.GetSavePostScoreKey(), score, postId).Err()
 }
+
+// GetPostsIdsByTime 根据发帖时间获取帖子ids
+func GetPostsIdsByTime(sorts string, start, end int64) (ids []string, err error) {
+	ctx := context.Background()
+	if sorts == "asc" {
+		// 升序，默认 zRange
+		ids, err = rdb.ZRange(ctx, dict.GetSavePostTimeKey(), start, end).Result()
+	} else {
+		// 降序， zRevRange
+		ids, err = rdb.ZRevRange(ctx, dict.GetSavePostTimeKey(), start, end).Result()
+	}
+	return
+}
+
+// GetPostsIdsByScore 根据帖子分数获取帖子ids
+func GetPostsIdsByScore(sorts string, start, end int64) (ids []string, err error) {
+	ctx := context.Background()
+	if sorts == "asc" {
+		// 升序，默认 zRange
+		ids, err = rdb.ZRange(ctx, dict.GetSavePostScoreKey(), start, end).Result()
+	} else {
+		// 降序， zRevRange
+		ids, err = rdb.ZRevRange(ctx, dict.GetSavePostScoreKey(), start, end).Result()
+	}
+	return
+}

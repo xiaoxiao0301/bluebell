@@ -32,6 +32,54 @@ func (p *PostService) GetPostList(param *models.ParamPage) (data []*models.PostL
 		zap.L().Error("GetPostList mysql.GetPosts err:", zap.Error(err))
 		return nil, err
 	}
+	return generaPostDetailWithUserAndCategory(posts)
+}
+
+// VotePost 给帖子投票
+func (p *PostService) VotePost(param *models.ParamVote, userId int64) (err error) {
+	// 本次投票的结果值
+	newValue := *param.Value
+	// 不能重复投赞同票
+	postIdStr := strconv.Itoa(int(param.PostId))
+	userIdStr := strconv.Itoa(int(userId))
+	// 原来投票的值
+	ov, err := redis.GetUserHasVoted(postIdStr, userIdStr)
+	if err != nil {
+		return err
+	}
+	return VoteHandler(userIdStr, postIdStr, ov, newValue)
+}
+
+// NewPostLists 新版帖子列表
+func (p *PostService) NewPostLists(param *models.ParamNewPostList) (data []*models.PostListDetail, err error) {
+	start := (param.Page - 1) * param.Size
+	end := param.Size + start - 1
+
+	var postIds []string
+	order := param.Order
+	sorts := param.Sorts
+	if order == "time" {
+		postIds, err = redis.GetPostsIdsByTime(sorts, int64(start), int64(end))
+	} else {
+		postIds, err = redis.GetPostsIdsByScore(sorts, int64(start), int64(end))
+	}
+	if err != nil {
+		zap.L().Error("从缓存获取ids出错:", zap.Error(err))
+		return nil, err
+	} else if err == nil {
+		zap.L().Info("未获取数据", zap.String("order", order), zap.String("sorts", sorts),
+			zap.Int("start", start), zap.Int("end", end))
+		return nil, nil
+	}
+	posts, err := mysql.GetPostsListByIds(postIds)
+	if err != nil {
+		zap.L().Error("mysql.GetPostsListByIds err:", zap.Error(err))
+		return nil, err
+	}
+	return generaPostDetailWithUserAndCategory(posts)
+}
+
+func generaPostDetailWithUserAndCategory(posts []*models.PostModel) (data []*models.PostListDetail, err error) {
 	data = make([]*models.PostListDetail, 0, len(posts))
 	for _, post := range posts {
 		userIdStr := strconv.Itoa(int(post.AuthorId))
@@ -55,19 +103,4 @@ func (p *PostService) GetPostList(param *models.ParamPage) (data []*models.PostL
 		data = append(data, postDetail)
 	}
 	return
-}
-
-// VotePost 给帖子投票
-func (p *PostService) VotePost(param *models.ParamVote, userId int64) (err error) {
-	// 本次投票的结果值
-	newValue := *param.Value
-	// 不能重复投赞同票
-	postIdStr := strconv.Itoa(int(param.PostId))
-	userIdStr := strconv.Itoa(int(userId))
-	// 原来投票的值
-	ov, err := redis.GetUserHasVoted(postIdStr, userIdStr)
-	if err != nil {
-		return err
-	}
-	return VoteHandler(userIdStr, postIdStr, ov, newValue)
 }

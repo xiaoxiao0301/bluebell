@@ -129,3 +129,30 @@ func PostVoteStore(ctx *gin.Context) {
 	}
 	ReturnOk(ctx, nil)
 }
+
+// NewPostsIndex 新版帖子接口
+func NewPostsIndex(ctx *gin.Context) {
+	// 请求URL v2/posts?page=1&size=10&order=time&sorts=asc
+	var param models.ParamNewPostList
+	if err := ctx.ShouldBindQuery(&param); err != nil {
+		zap.L().Error("NewPostsIndex with invalid param", zap.Error(err))
+		errs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ReturnErr(ctx, dict.CodeInvalidParam)
+			return
+		}
+		ReturnErrWithMessage(ctx, dict.CodeInvalidParam, models.RemoveTopStruct(errs.Translate(models.Trans)))
+		return
+	}
+	posts, err := PostService.NewPostLists(&param)
+	if err != nil {
+		if err == dict.ErrorNotQueryResult {
+			ReturnOk(ctx, "暂无数据")
+			return
+		}
+		zap.L().Error("PostService.NewPostLists error:", zap.Error(err))
+		ReturnErr(ctx, dict.CodeNetWorkBusy)
+		return
+	}
+	ReturnOk(ctx, posts)
+}
