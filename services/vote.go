@@ -32,7 +32,7 @@ const (
 	VotePostOneScore     = 432           // 帖子每一票增加432分
 )
 
-// VoteHandler 投票逻辑处理
+// VoteHandler 投票逻辑处理, 应该使用事务来处理
 func VoteHandler(userId string, postIdStr string, ov float64, nv int8) (err error) {
 	// 被投票的帖子必须是一周之内
 	postPublishTime, err := redis.GetPostPublishTime(postIdStr)

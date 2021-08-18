@@ -30,3 +30,17 @@ func GetPostPublishTime(postId string) (float64, error) {
 	ctx := context.Background()
 	return rdb.ZScore(ctx, dict.GetSavePostTimeKey(), postId).Result()
 }
+
+// GetCategoryPosts 获取分类下的帖子信息
+func GetCategoryPosts(categoryId string) ([]string, error) {
+	ctx := context.Background()
+	// [],nil or [有值] nil
+	ids, err := rdb.SMembers(ctx, dict.GetSaveCategoryPostsCountKey(categoryId)).Result()
+	if len(ids) > 0 {
+		return ids, nil
+	} else if len(ids) == 0 {
+		return ids, dict.ErrorNotQueryResult
+	}
+	return ids, err
+
+}

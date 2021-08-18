@@ -3,6 +3,7 @@ package services
 import (
 	"go_web/web_app/dao/mysql"
 	"go_web/web_app/dao/redis"
+	"go_web/web_app/dict"
 	"go_web/web_app/models"
 	"go_web/web_app/pkg/snowflake"
 	"strconv"
@@ -65,11 +66,11 @@ func (p *PostService) NewPostLists(param *models.ParamNewPostList) (data []*mode
 	}
 	if err != nil {
 		zap.L().Error("从缓存获取ids出错:", zap.Error(err))
-		return nil, err
+		return make([]*models.PostListDetail, 0), err
 	} else if err == nil {
 		zap.L().Info("未获取数据", zap.String("order", order), zap.String("sorts", sorts),
 			zap.Int("start", start), zap.Int("end", end))
-		return nil, nil
+		return make([]*models.PostListDetail, 0), nil
 	}
 	posts, err := mysql.GetPostsListByIds(postIds)
 	if err != nil {
@@ -79,6 +80,26 @@ func (p *PostService) NewPostLists(param *models.ParamNewPostList) (data []*mode
 	return generaPostDetailWithUserAndCategory(posts)
 }
 
+// GetPosts 获取分类下的帖子
+func (p *PostService) GetPosts(categoryId string) (data []*models.PostModel, err error) {
+	data = make([]*models.PostModel, 0)
+	postIds, err := redis.GetCategoryPosts(categoryId)
+	if err != nil {
+		if err == dict.ErrorNotQueryResult {
+			return data, nil
+		}
+		zap.L().Error("redis.GetCategoryPosts error", zap.Error(err))
+		return data, err
+	}
+	data, err = mysql.GetPostsListByIds(postIds)
+	if err != nil {
+		zap.L().Error("mysql.GetPostsListByIds error", zap.Error(err))
+		return data, err
+	}
+	return
+}
+
+// 组装返回 models.PostListDetail 数据
 func generaPostDetailWithUserAndCategory(posts []*models.PostModel) (data []*models.PostListDetail, err error) {
 	data = make([]*models.PostListDetail, 0, len(posts))
 	for _, post := range posts {

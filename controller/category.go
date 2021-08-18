@@ -74,3 +74,23 @@ func CategoryDetailHandler(ctx *gin.Context) {
 	}
 	ReturnOk(ctx, category)
 }
+
+// GetCategoryIdPosts 获取某个分类下的所有帖子
+func GetCategoryIdPosts(ctx *gin.Context) {
+	idStr := ctx.Param("id")
+	if idStr == "" {
+		ReturnErr(ctx, dict.CodeInvalidParam)
+		return
+	}
+	posts, err := PostService.GetPosts(idStr)
+	if err != nil {
+		if errors.Is(err, dict.ErrorNotQueryResult) {
+			ReturnErr(ctx, dict.CodeNotQueryResult)
+			return
+		}
+		zap.L().Error("PostService.NewPostLists error:", zap.Error(err))
+		ReturnErr(ctx, dict.CodeNetWorkBusy)
+		return
+	}
+	ReturnOk(ctx, posts)
+}
