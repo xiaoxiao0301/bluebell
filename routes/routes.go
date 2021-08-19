@@ -8,6 +8,11 @@ import (
 	"go_web/web_app/models"
 	"net/http"
 
+	_ "go_web/web_app/docs" // 引入 swagger生成的docs https://github.com/swaggo/gin-swagger
+
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,6 +20,11 @@ func SetUp() *gin.Engine {
 	r := gin.New()
 	r.Use(logger.GinLogger(), logger.GinRecovery(true))
 
+	// swagger路由
+	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json") // The url pointing to API definition
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+
+	// 测试路由
 	r.GET("test", func(context *gin.Context) {
 		t := "2021-08-16 14:25:16"
 		fmt.Println(models.ConvertTimestampStringToSeconds(t))

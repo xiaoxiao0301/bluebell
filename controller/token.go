@@ -14,6 +14,15 @@ import (
 
 var tokenService services.TokenService
 
+// RefreshTokenHandler 刷新access_token
+// @Summary 刷新token
+// @Description 刷新access_token
+// @Tags token
+// @Accept  application/json
+// @Produce  application/json
+// @Param token body models.ParamRefreshToken  true "jwt验证信息"
+// @Success 200 {object} _ResponseRefreshToken
+// @Router /refresh [post]
 func RefreshTokenHandler(ctx *gin.Context) {
 	var param models.ParamRefreshToken
 	if err := ctx.ShouldBindJSON(&param); err != nil {

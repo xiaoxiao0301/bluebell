@@ -20,6 +20,21 @@ import (
 	"go.uber.org/zap"
 )
 
+// @title BlueBell Api
+// @version 1.0
+// @description 使用gin开发简单帖子展示系统
+// @termsOfService https://www.jixiaoxiao.com
+
+// @contact.name Xiao
+// @contact.url https://www.jixiaoxiao.com
+// @contact.email simplexiaoxiao@gmail.com
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost:8080
+// @BasePath /
+
 func main() {
 	// 加载配置文件
 	if err := conf.Init(); err != nil {

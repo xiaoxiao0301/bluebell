@@ -17,6 +17,14 @@ import (
 var UserServices services.UserService
 
 // SignUpHandler 注册处理
+// @Summary 注册
+// @Description 用户注册
+// @Tags 用户
+// @Accept  application/json
+// @Produce  application/json
+// @Param user body models.ParamSignUp  true "注册信息"
+// @Success 200 {object} _ResponseCommon
+// @Router /signup [post]
 func SignUpHandler(ctx *gin.Context) {
 	var param models.ParamSignUp
 	if err := ctx.ShouldBindJSON(&param); err != nil {
@@ -44,6 +52,15 @@ func SignUpHandler(ctx *gin.Context) {
 }
 
 // LoginHandler 登录处理
+// @Summary 登陆
+// @Description 用户注册
+// @Tags 用户
+// @Accept  application/json
+// @Produce  application/json
+// @Param user body models.ParamLogin  true "登陆信息"
+// @Success 200 {object} _ResponseCommon
+// @Success 200 {object} _ResponseLoginSuccess
+// @Router /login [post]
 func LoginHandler(ctx *gin.Context) {
 	var param models.ParamLogin
 	if err := ctx.ShouldBindJSON(&param); err != nil {

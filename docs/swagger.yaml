@@ -1,0 +1,257 @@
+basePath: /
+definitions:
+  controller._ResponseCommon:
+    properties:
+      code:
+        description: 业务响应状态码
+        type: integer
+      data:
+        description: 数据
+        type: string
+      message:
+        description: 提示信息
+        type: string
+    type: object
+  controller._ResponseLoginSuccess:
+    properties:
+      access_token:
+        description: jwt access_token 验证使用
+        type: string
+      code:
+        description: 业务响应状态码
+        type: integer
+      message:
+        description: 提示信息
+        type: string
+      refresh_token:
+        description: jwt refresh_token 刷新token
+        type: string
+      user_id:
+        description: 登陆用户ID
+        type: string
+      username:
+        description: 登陆用户昵称
+        type: string
+    type: object
+  controller._ResponseRefreshToken:
+    properties:
+      access_token:
+        description: jwt access_token 验证使用
+        type: string
+      code:
+        description: 业务响应状态码
+        type: integer
+      message:
+        description: 提示信息
+        type: string
+      refresh_token:
+        description: jwt refresh_token 刷新token
+        type: string
+    type: object
+  models.CategoryModel:
+    properties:
+      category_id:
+        example: "0"
+        type: string
+      category_name:
+        type: string
+      created_time:
+        $ref: '#/definitions/models.LocalTime'
+      id:
+        type: integer
+      introduction:
+        type: string
+      updated_time:
+        $ref: '#/definitions/models.LocalTime'
+    type: object
+  models.CategoryRow:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.LocalTime:
+    properties:
+      time.Time:
+        type: string
+    type: object
+  models.ParamCategory:
+    properties:
+      category_name:
+        type: string
+      introduction:
+        type: string
+    required:
+    - category_name
+    - introduction
+    type: object
+  models.ParamLogin:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  models.ParamRefreshToken:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    required:
+    - access_token
+    - refresh_token
+    type: object
+  models.ParamSignUp:
+    properties:
+      password:
+        type: string
+      re_password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - re_password
+    - username
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: simplexiaoxiao@gmail.com
+    name: Xiao
+    url: https://www.jixiaoxiao.com
+  description: 使用gin开发简单帖子展示系统
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://www.jixiaoxiao.com
+  title: BlueBell Api
+  version: "1.0"
+paths:
+  /categories:
+    get:
+      description: 分类列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CategoryRow'
+      summary: 分类列表
+      tags:
+      - 社区
+  /category:
+    post:
+      consumes:
+      - application/json
+      description: 新建分类
+      parameters:
+      - description: 社区信息
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.ParamCategory'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller._ResponseCommon'
+      summary: 新建分类
+      tags:
+      - 社区
+  /category/{id}:
+    get:
+      description: 分类详情
+      parameters:
+      - default: "3730413906300928"
+        description: 分类ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CategoryModel'
+      summary: 分类详情
+      tags:
+      - 社区
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: 用户注册
+      parameters:
+      - description: 登陆信息
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.ParamLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller._ResponseLoginSuccess'
+      summary: 登陆
+      tags:
+      - 用户
+  /refresh:
+    post:
+      consumes:
+      - application/json
+      description: 刷新access_token
+      parameters:
+      - description: jwt验证信息
+        in: body
+        name: token
+        required: true
+        schema:
+          $ref: '#/definitions/models.ParamRefreshToken'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller._ResponseRefreshToken'
+      summary: 刷新token
+      tags:
+      - token
+  /signup:
+    post:
+      consumes:
+      - application/json
+      description: 用户注册
+      parameters:
+      - description: 注册信息
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.ParamSignUp'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controller._ResponseCommon'
+      summary: 注册
+      tags:
+      - 用户
+swagger: "2.0"
