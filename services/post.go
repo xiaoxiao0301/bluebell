@@ -80,7 +80,7 @@ func (p *PostService) NewPostLists(param *models.ParamNewPostList) (data []*mode
 	return generaPostDetailWithUserAndCategory(posts)
 }
 
-// GetPosts 获取分类下的帖子
+// GetPosts 获取社区下的帖子
 func (p *PostService) GetPosts(categoryId string) (data []*models.PostModel, err error) {
 	data = make([]*models.PostModel, 0)
 	postIds, err := redis.GetCategoryPosts(categoryId)

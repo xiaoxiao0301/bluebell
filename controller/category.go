@@ -16,13 +16,13 @@ import (
 
 var CategoryService services.CategoryService
 
-// CategoryStore 新建分类
-// @Summary 新建分类
-// @Description 新建分类
+// CategoryStore 新建社区
+// @Summary 新建社区
+// @Description 新建社区
 // @Tags 社区
 // @Accept  application/json
 // @Produce  application/json
-// @Param category body models.ParamCategory  true "社区信息"
+// @Param category body models.ParamCategory true "社区"
 // @Success 200 {object} _ResponseCommon
 // @Router /category [post]
 func CategoryStore(ctx *gin.Context) {
@@ -47,9 +47,9 @@ func CategoryStore(ctx *gin.Context) {
 	ReturnOk(ctx, nil)
 }
 
-// CategoryListHandler 分类列表
-// @Summary 分类列表
-// @Description 分类列表
+// CategoryListHandler 社区列表
+// @Summary 社区列表
+// @Description 社区列表
 // @Tags 社区
 // @Produce  application/json
 // @Success 200 {object} models.CategoryRow
@@ -61,19 +61,19 @@ func CategoryListHandler(ctx *gin.Context) {
 			ReturnErr(ctx, dict.CodeNotQueryResult)
 			return
 		}
-		zap.L().Error("获取分类列表出错", zap.Error(err))
+		zap.L().Error("获取社区列表出错", zap.Error(err))
 		ReturnErr(ctx, dict.CodeNetWorkBusy)
 		return
 	}
 	ReturnOk(ctx, categoryList)
 }
 
-// CategoryDetailHandler 分类详情
-// @Summary 分类详情
-// @Description 分类详情
+// CategoryDetailHandler 社区详情
+// @Summary 社区详情
+// @Description 社区详情
 // @Tags 社区
 // @Produce  application/json
-// @Param id path string true "分类ID" default(3730413906300928)
+// @Param id path string true "社区ID" default(3730413906300928)
 // @Success 200 {object} _ResponseCommon
 // @Success 200 {object} models.CategoryModel
 // @Router /category/{id} [get]
@@ -90,14 +90,24 @@ func CategoryDetailHandler(ctx *gin.Context) {
 			ReturnErr(ctx, dict.CodeNotQueryResult)
 			return
 		}
-		zap.L().Error("获取分类详情出错", zap.Error(err))
+		zap.L().Error("获取社区详情出错", zap.Error(err))
 		ReturnErr(ctx, dict.CodeNetWorkBusy)
 		return
 	}
 	ReturnOk(ctx, category)
 }
 
-// GetCategoryIdPosts 获取某个分类下的所有帖子
+// GetCategoryIdPosts 获取某个社区下的所有帖子
+// @Summary 获取某个社区下的所有帖子
+// @Description 获取某个社区下的所有帖子
+// @Tags 社区
+// @Produce  application/json
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param id path string true "社区ID" default(3730413906300928)
+// @Success 200 {object} _ResponseCommon
+// @Success 200 {object} models.PostModel
+// @Security ApiKeyAuth
+// @Router /category/{id}/posts [get]
 func GetCategoryIdPosts(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	if idStr == "" {

@@ -14,7 +14,7 @@ create table `user` (
     unique key `idx_user_id` (`user_id`) using btree
 ) engine=innodb default charset=utf8mb4 collate=utf8mb4_general_ci;
 
-# 分类表
+# 社区表
 drop table if exists `category`;
 create table `category` (
     `id` bigint(20) not null auto_increment,
@@ -36,7 +36,7 @@ create table `post` (
     `title` varchar(128) collate utf8mb4_general_ci not null comment '标题',
     `content` text collate utf8mb4_general_ci not null comment '内容',
     `author_id` bigint(20) not null comment '作者id',
-    `category_id` bigint(20) not null comment '分类id',
+    `category_id` bigint(20) not null comment '社区id',
     `status` tinyint(4) not null default 0 comment '帖子状态',
     `created_time` timestamp null default current_timestamp,
     `updated_time` timestamp null default current_timestamp on update current_timestamp,

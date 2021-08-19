@@ -39,11 +39,11 @@ func SetUp() *gin.Engine {
 	// 刷新token
 	r.POST("refresh", controller.RefreshTokenHandler)
 
-	// 保存分类
+	// 保存社区
 	r.POST("category", controller.CategoryStore)
-	// 分类列表
+	// 社区列表
 	r.GET("categories", controller.CategoryListHandler)
-	// 分类详情
+	// 社区详情
 	r.GET("category/:id", controller.CategoryDetailHandler)
 
 	// 路由分组

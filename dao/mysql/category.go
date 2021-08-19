@@ -7,7 +7,7 @@ import (
 	"go_web/web_app/models"
 )
 
-// GetCategoryList 获取分类列表
+// GetCategoryList 获取社区列表
 func GetCategoryList() (list []*models.CategoryRow, err error) {
 	sqlStr := `select category_id,category_name from category`
 	err = db.Select(&list, sqlStr)
@@ -19,7 +19,7 @@ func GetCategoryList() (list []*models.CategoryRow, err error) {
 	return
 }
 
-// GetCategoryDetail 获取分类详细
+// GetCategoryDetail 获取社区详细
 func GetCategoryDetail(id int64) (category *models.CategoryModel, err error) {
 	sqlStr := `select * from category where category_id = ?`
 	category = new(models.CategoryModel)
@@ -32,7 +32,7 @@ func GetCategoryDetail(id int64) (category *models.CategoryModel, err error) {
 	return
 }
 
-// SaveCategory 存储分类信息
+// SaveCategory 存储社区信息
 func SaveCategory(category *models.CategoryModel) (err error) {
 	sqlStr := `insert into category(category_id, category_name, introduction) values(?, ?, ?)`
 	_, err = db.Exec(sqlStr, category.CategoryId, category.CategoryName, category.Introduction)

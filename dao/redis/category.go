@@ -11,7 +11,7 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-// SaveCategory 将分类信息缓存
+// SaveCategory 将社区信息缓存
 func SaveCategory(category *models.CategoryModel) (err error) {
 	strId := strconv.Itoa(int(category.CategoryId))
 	ctx := context.Background()
@@ -19,7 +19,7 @@ func SaveCategory(category *models.CategoryModel) (err error) {
 	return rdb.Set(ctx, dict.GetSaveCategoryKey(strId), categoryJson, 0).Err()
 }
 
-// GetCategoryDetail 获取分类详细信息
+// GetCategoryDetail 获取社区详细信息
 func GetCategoryDetail(categoryId string) (category *models.CategoryModel, err error) {
 	ctx := context.Background()
 	categoryJson, err := rdb.Get(ctx, dict.GetSaveCategoryKey(categoryId)).Result()
@@ -34,7 +34,7 @@ func GetCategoryDetail(categoryId string) (category *models.CategoryModel, err e
 	return
 }
 
-// SaveCategoryPostCounts 统计分类下帖子的数量
+// SaveCategoryPostCounts 统计社区下帖子的数量
 func SaveCategoryPostCounts(categoryId string, postId int64) error {
 	ctx := context.Background()
 	return rdb.SAdd(ctx, dict.GetSaveCategoryPostsCountKey(categoryId), postId).Err()

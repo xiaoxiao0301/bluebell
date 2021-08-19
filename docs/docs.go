@@ -17,16 +17,7 @@ var doc = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "https://www.jixiaoxiao.com",
-        "contact": {
-            "name": "Xiao",
-            "url": "https://www.jixiaoxiao.com",
-            "email": "simplexiaoxiao@gmail.com"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
+        "contact": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -34,14 +25,14 @@ var doc = `{
     "paths": {
         "/categories": {
             "get": {
-                "description": "分类列表",
+                "description": "社区列表",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "社区"
                 ],
-                "summary": "分类列表",
+                "summary": "社区列表",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -54,7 +45,7 @@ var doc = `{
         },
         "/category": {
             "post": {
-                "description": "新建分类",
+                "description": "新建社区",
                 "consumes": [
                     "application/json"
                 ],
@@ -64,10 +55,10 @@ var doc = `{
                 "tags": [
                     "社区"
                 ],
-                "summary": "新建分类",
+                "summary": "新建社区",
                 "parameters": [
                     {
-                        "description": "社区信息",
+                        "description": "社区",
                         "name": "category",
                         "in": "body",
                         "required": true,
@@ -88,19 +79,19 @@ var doc = `{
         },
         "/category/{id}": {
             "get": {
-                "description": "分类详情",
+                "description": "社区详情",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "社区"
                 ],
-                "summary": "分类详情",
+                "summary": "社区详情",
                 "parameters": [
                     {
                         "type": "string",
                         "default": "3730413906300928",
-                        "description": "分类ID",
+                        "description": "社区ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -111,6 +102,48 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/models.CategoryModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/category/{id}/posts": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取某个社区下的所有帖子",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "社区"
+                ],
+                "summary": "获取某个社区下的所有帖子",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "3730413906300928",
+                        "description": "社区ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.PostModel"
                         }
                     }
                 }
@@ -145,6 +178,190 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/controller._ResponseLoginSuccess"
+                        }
+                    }
+                }
+            }
+        },
+        "/post": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "存储帖子",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "帖子"
+                ],
+                "summary": "存储帖子",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "帖子",
+                        "name": "posts",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ParamPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controller._ResponseCommon"
+                        }
+                    }
+                }
+            }
+        },
+        "/post/vote": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "用户可以给帖子投赞成或者反对票",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "帖子"
+                ],
+                "summary": "帖子投票",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "投票",
+                        "name": "vote",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ParamVote"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.PostListDetail"
+                        }
+                    }
+                }
+            }
+        },
+        "/post/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "帖子详情",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "帖子"
+                ],
+                "summary": "帖子详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "3765906580705280",
+                        "description": "帖子ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.PostModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/posts": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "帖子列表",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "帖子"
+                ],
+                "summary": "帖子列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "每页大小",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.PostListDetail"
                         }
                     }
                 }
@@ -213,6 +430,72 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/controller._ResponseCommon"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/posts": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "可以根据发帖时间和帖子分数来获取帖子列表",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "帖子"
+                ],
+                "summary": "帖子列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer 用户令牌",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "每页大小",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "time",
+                        "description": "排序依据, time 时间 score 得分",
+                        "name": "order",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "default": "asc",
+                        "description": "升序还是降序 asc 升序 desc 降序",
+                        "name": "sorts",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.PostListDetail"
                         }
                     }
                 }
@@ -291,22 +574,28 @@ var doc = `{
             "type": "object",
             "properties": {
                 "category_id": {
+                    "description": "社区ID",
                     "type": "string",
                     "example": "0"
                 },
                 "category_name": {
+                    "description": "社区名称",
                     "type": "string"
                 },
                 "created_time": {
+                    "description": "社区创建时间",
                     "$ref": "#/definitions/models.LocalTime"
                 },
                 "id": {
+                    "description": "ID",
                     "type": "integer"
                 },
                 "introduction": {
+                    "description": "社区简介",
                     "type": "string"
                 },
                 "updated_time": {
+                    "description": "社区更新时间",
                     "$ref": "#/definitions/models.LocalTime"
                 }
             }
@@ -315,9 +604,11 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
+                    "description": "社区ID",
                     "type": "integer"
                 },
                 "name": {
+                    "description": "社区名称",
                     "type": "string"
                 }
             }
@@ -338,9 +629,11 @@ var doc = `{
             ],
             "properties": {
                 "category_name": {
+                    "description": "社区名称",
                     "type": "string"
                 },
                 "introduction": {
+                    "description": "社区简介",
                     "type": "string"
                 }
             }
@@ -353,9 +646,48 @@ var doc = `{
             ],
             "properties": {
                 "password": {
-                    "type": "string"
+                    "description": "密码",
+                    "type": "string",
+                    "example": "12456"
                 },
                 "username": {
+                    "description": "用户名",
+                    "type": "string",
+                    "example": "jack"
+                }
+            }
+        },
+        "models.ParamPost": {
+            "type": "object",
+            "required": [
+                "category_id",
+                "content",
+                "title"
+            ],
+            "properties": {
+                "author_id": {
+                    "description": "发帖作者",
+                    "type": "integer"
+                },
+                "category_id": {
+                    "description": "社区ID",
+                    "type": "string",
+                    "example": "0"
+                },
+                "content": {
+                    "description": "帖子内容",
+                    "type": "string"
+                },
+                "post_id": {
+                    "description": "帖子ID",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "帖子状态",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "帖子标题",
                     "type": "string"
                 }
             }
@@ -368,9 +700,11 @@ var doc = `{
             ],
             "properties": {
                 "access_token": {
+                    "description": "令牌",
                     "type": "string"
                 },
                 "refresh_token": {
+                    "description": "刷新令牌",
                     "type": "string"
                 }
             }
@@ -384,13 +718,147 @@ var doc = `{
             ],
             "properties": {
                 "password": {
+                    "description": "密码",
                     "type": "string"
                 },
                 "re_password": {
+                    "description": "确认密码",
                     "type": "string"
                 },
                 "username": {
+                    "description": "用户名",
                     "type": "string"
+                }
+            }
+        },
+        "models.ParamVote": {
+            "type": "object",
+            "required": [
+                "post_id",
+                "value"
+            ],
+            "properties": {
+                "post_id": {
+                    "description": "投票的帖子id",
+                    "type": "string",
+                    "example": "0"
+                },
+                "value": {
+                    "description": "投票结果， 1 赞成 0 取消 -1 反对",
+                    "type": "string",
+                    "example": "0"
+                }
+            }
+        },
+        "models.PostListDetail": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "description": "帖子作者ID",
+                    "type": "string",
+                    "example": "0"
+                },
+                "category_id": {
+                    "description": "社区ID",
+                    "type": "string",
+                    "example": "0"
+                },
+                "category_name": {
+                    "description": "社区名称",
+                    "type": "string"
+                },
+                "content": {
+                    "description": "帖子内容",
+                    "type": "string"
+                },
+                "created_time": {
+                    "description": "社区创建时间",
+                    "$ref": "#/definitions/models.LocalTime"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "ID",
+                    "type": "integer"
+                },
+                "introduction": {
+                    "description": "社区简介",
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "post_id": {
+                    "description": "帖子ID",
+                    "type": "string",
+                    "example": "0"
+                },
+                "status": {
+                    "description": "帖子状态",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "帖子标题",
+                    "type": "string"
+                },
+                "updated_time": {
+                    "description": "社区更新时间",
+                    "$ref": "#/definitions/models.LocalTime"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "0"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.PostModel": {
+            "type": "object",
+            "properties": {
+                "author_id": {
+                    "description": "帖子作者ID",
+                    "type": "string",
+                    "example": "0"
+                },
+                "category_id": {
+                    "description": "帖子社区ID",
+                    "type": "string",
+                    "example": "0"
+                },
+                "content": {
+                    "description": "帖子内容",
+                    "type": "string"
+                },
+                "created_time": {
+                    "description": "帖子创建时间",
+                    "$ref": "#/definitions/models.LocalTime"
+                },
+                "id": {
+                    "description": "id",
+                    "type": "integer"
+                },
+                "post_id": {
+                    "description": "帖子ID",
+                    "type": "string",
+                    "example": "0"
+                },
+                "status": {
+                    "description": "帖子状态",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "帖子标题",
+                    "type": "string"
+                },
+                "updated_time": {
+                    "description": "帖子更新时间",
+                    "$ref": "#/definitions/models.LocalTime"
                 }
             }
         }

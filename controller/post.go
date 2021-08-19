@@ -15,6 +15,16 @@ import (
 var PostService services.PostService
 
 // PostStore 存储帖子
+// @Summary 存储帖子
+// @Description 存储帖子
+// @Tags 帖子
+// @Accept application/json
+// @Produce  application/json
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param posts body models.ParamPost true "帖子"
+// @Success 200 {object} _ResponseCommon
+// @Security ApiKeyAuth
+// @Router /post [post]
 func PostStore(ctx *gin.Context) {
 	var param models.ParamPost
 	if err := ctx.ShouldBindJSON(&param); err != nil {
@@ -42,6 +52,15 @@ func PostStore(ctx *gin.Context) {
 }
 
 // PostShow 帖子详情
+// @Summary 帖子详情
+// @Description 帖子详情
+// @Tags 帖子
+// @Produce  application/json
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param id path string true "帖子ID" default(3765906580705280)
+// @Success 200 {object} models.PostModel
+// @Security ApiKeyAuth
+// @Router /post/{id} [get]
 func PostShow(ctx *gin.Context) {
 	idStr := ctx.Param("id")
 	if idStr == "" {
@@ -66,6 +85,16 @@ func PostShow(ctx *gin.Context) {
 }
 
 // PostIndex 帖子列表
+// @Summary 帖子列表
+// @Description 帖子列表
+// @Tags 帖子
+// @Produce  application/json
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param page query int true "页码" default(1)
+// @Param size query int true "每页大小" default(10)
+// @Success 200 {object} models.PostListDetail
+// @Security ApiKeyAuth
+// @Router /posts [get]
 func PostIndex(ctx *gin.Context) {
 	var param models.ParamPage
 	if err := ctx.ShouldBindQuery(&param); err != nil {
@@ -92,6 +121,17 @@ func PostIndex(ctx *gin.Context) {
 }
 
 // PostVoteStore 帖子投票
+// @Summary 帖子投票
+// @Description 用户可以给帖子投赞成或者反对票
+// @Tags 帖子
+// @Accept application/json
+// @Produce  application/json
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param vote body models.ParamVote true "投票"
+// @Success 200 {object} _ResponseCommon
+// @Success 200 {object} models.PostListDetail
+// @Security ApiKeyAuth
+// @Router /post/vote [post]
 func PostVoteStore(ctx *gin.Context) {
 	var param models.ParamVote
 	if err := ctx.ShouldBindJSON(&param); err != nil {
@@ -131,6 +171,18 @@ func PostVoteStore(ctx *gin.Context) {
 }
 
 // NewPostsIndex 新版帖子接口
+// @Summary 帖子列表
+// @Description 可以根据发帖时间和帖子分数来获取帖子列表
+// @Tags 帖子
+// @Produce  application/json
+// @Param Authorization header string true "Bearer 用户令牌"
+// @Param page query int true "页码" default(1)
+// @Param size query int true "每页大小" default(10)
+// @Param order query string true "排序依据, time 时间 score 得分" default(time)
+// @Param sorts query string true "升序还是降序 asc 升序 desc 降序" default(asc)
+// @Success 200 {object} models.PostListDetail
+// @Security ApiKeyAuth
+// @Router /v2/posts [get]
 func NewPostsIndex(ctx *gin.Context) {
 	// 请求URL v2/posts?page=1&size=10&order=time&sorts=asc
 	var param models.ParamNewPostList

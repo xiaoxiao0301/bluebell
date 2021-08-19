@@ -9,8 +9,8 @@ const ContextUserIdKey = "userId"
 const (
 	KeyPrefix             = "bluebell:"              // 缓存前缀
 	UserKey               = "user:"                  // 用户key => user:id
-	CategoryPostsCountKey = "category:post:numbers:" // 当前分类下帖子总数
-	CategoryKeyPrefix     = "category:"              // 分类key => category:id
+	CategoryPostsCountKey = "category:post:numbers:" // 当前社区下帖子总数
+	CategoryKeyPrefix     = "category:"              // 社区key => category:id
 	PostKeyPrefix         = "post:"                  // 帖子前缀
 	PostTimeKey           = "time"                   // 按照帖子发表时间存储 zSet
 	UserVotedPostKey      = "user:vote:"             // 记录用户给某个帖子投票 zSet
