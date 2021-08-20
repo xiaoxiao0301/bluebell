@@ -327,11 +327,6 @@ paths:
     get:
       description: 获取某个社区下的所有帖子
       parameters:
-      - description: Bearer 用户令牌
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - default: "3730413906300928"
         description: 社区ID
         in: path
@@ -345,8 +340,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.PostModel'
-      security:
-      - ApiKeyAuth: []
       summary: 获取某个社区下的所有帖子
       tags:
       - 社区
@@ -405,11 +398,6 @@ paths:
     get:
       description: 帖子详情
       parameters:
-      - description: Bearer 用户令牌
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - default: "3765906580705280"
         description: 帖子ID
         in: path
@@ -423,8 +411,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.PostModel'
-      security:
-      - ApiKeyAuth: []
       summary: 帖子详情
       tags:
       - 帖子
@@ -461,11 +447,6 @@ paths:
     get:
       description: 帖子列表
       parameters:
-      - description: Bearer 用户令牌
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - default: 1
         description: 页码
         in: query
@@ -485,8 +466,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.PostListDetail'
-      security:
-      - ApiKeyAuth: []
       summary: 帖子列表
       tags:
       - 帖子
@@ -538,11 +517,6 @@ paths:
     get:
       description: 可以根据发帖时间和帖子分数来获取帖子列表
       parameters:
-      - description: Bearer 用户令牌
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - default: 1
         description: 页码
         in: query
@@ -574,8 +548,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.PostListDetail'
-      security:
-      - ApiKeyAuth: []
       summary: 帖子列表
       tags:
       - 帖子

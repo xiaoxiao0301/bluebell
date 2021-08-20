@@ -51,6 +51,11 @@ func GetPostsIdsByTime(sorts string, start, end int64) (ids []string, err error)
 		// 降序， zRevRange
 		ids, err = rdb.ZRevRange(ctx, dict.GetSavePostTimeKey(), start, end).Result()
 	}
+	if len(ids) > 0 {
+		return ids, nil
+	} else if len(ids) == 0 {
+		return ids, dict.ErrorNotQueryResult
+	}
 	return
 }
 
@@ -63,6 +68,11 @@ func GetPostsIdsByScore(sorts string, start, end int64) (ids []string, err error
 	} else {
 		// 降序， zRevRange
 		ids, err = rdb.ZRevRange(ctx, dict.GetSavePostScoreKey(), start, end).Result()
+	}
+	if len(ids) > 0 {
+		return ids, nil
+	} else if len(ids) == 0 {
+		return ids, dict.ErrorNotQueryResult
 	}
 	return
 }

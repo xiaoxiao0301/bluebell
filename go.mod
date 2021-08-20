@@ -3,12 +3,7 @@ module go_web/web_app
 go 1.16
 
 require (
-	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
 	github.com/bwmarrin/snowflake v0.3.0
-	github.com/cosmtrek/air v1.27.3 // indirect
-	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
-	github.com/creack/pty v1.1.14 // indirect
-	github.com/fatih/color v1.12.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9
 	github.com/gin-gonic/gin v1.7.4
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
@@ -20,15 +15,14 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/jmoiron/sqlx v1.3.4
+	github.com/juju/ratelimit v1.0.1
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-isatty v0.0.13 // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/sony/sonyflake v1.0.0
 	github.com/spf13/viper v1.8.1
-	github.com/swaggo/files v0.0.0-20210815190702-a29dd2bc99b2 // indirect
-	github.com/swaggo/gin-swagger v1.3.1 // indirect
-	github.com/swaggo/swag v1.7.1 // indirect
-	github.com/ugorji/go v1.2.6 // indirect
+	github.com/swaggo/gin-swagger v1.3.1
+	github.com/swaggo/swag v1.7.1
 	go.uber.org/zap v1.17.0
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d // indirect

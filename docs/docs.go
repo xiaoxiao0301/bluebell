@@ -109,11 +109,6 @@ var doc = `{
         },
         "/category/{id}/posts": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "获取某个社区下的所有帖子",
                 "produces": [
                     "application/json"
@@ -123,13 +118,6 @@ var doc = `{
                 ],
                 "summary": "获取某个社区下的所有帖子",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer 用户令牌",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "default": "3730413906300928",
@@ -277,11 +265,6 @@ var doc = `{
         },
         "/post/{id}": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "帖子详情",
                 "produces": [
                     "application/json"
@@ -291,13 +274,6 @@ var doc = `{
                 ],
                 "summary": "帖子详情",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer 用户令牌",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "default": "3765906580705280",
@@ -319,11 +295,6 @@ var doc = `{
         },
         "/posts": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "帖子列表",
                 "produces": [
                     "application/json"
@@ -333,13 +304,6 @@ var doc = `{
                 ],
                 "summary": "帖子列表",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer 用户令牌",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "integer",
                         "default": 1,
@@ -437,11 +401,6 @@ var doc = `{
         },
         "/v2/posts": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "可以根据发帖时间和帖子分数来获取帖子列表",
                 "produces": [
                     "application/json"
@@ -451,13 +410,6 @@ var doc = `{
                 ],
                 "summary": "帖子列表",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Bearer 用户令牌",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
                     {
                         "type": "integer",
                         "default": 1,

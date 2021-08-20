@@ -17,6 +17,7 @@ const (
 	CodeNotQueryResult
 	CodeVotedEqualResult
 	CodeVoteTimeExpires
+	CodeRateLimit
 )
 
 var codeText = map[ResponseCode]string{
@@ -34,6 +35,7 @@ var codeText = map[ResponseCode]string{
 	CodeNotQueryResult:      "暂无数据",
 	CodeVotedEqualResult:    "不能投重复票",
 	CodeVoteTimeExpires:     "投票时间已过",
+	CodeRateLimit:           "限制请求",
 }
 
 // Message 返回错误码对应的文字信息

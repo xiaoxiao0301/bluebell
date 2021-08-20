@@ -64,13 +64,17 @@ func (p *PostService) NewPostLists(param *models.ParamNewPostList) (data []*mode
 	} else {
 		postIds, err = redis.GetPostsIdsByScore(sorts, int64(start), int64(end))
 	}
+
+	data = make([]*models.PostListDetail, 0)
+
 	if err != nil {
+		if err == dict.ErrorNotQueryResult {
+			zap.L().Info("未获取数据", zap.String("order", order), zap.String("sorts", sorts),
+				zap.Int("start", start), zap.Int("end", end))
+			return data, nil
+		}
 		zap.L().Error("从缓存获取ids出错:", zap.Error(err))
-		return make([]*models.PostListDetail, 0), err
-	} else if err == nil {
-		zap.L().Info("未获取数据", zap.String("order", order), zap.String("sorts", sorts),
-			zap.Int("start", start), zap.Int("end", end))
-		return make([]*models.PostListDetail, 0), nil
+		return data, err
 	}
 	posts, err := mysql.GetPostsListByIds(postIds)
 	if err != nil {

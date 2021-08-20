@@ -56,10 +56,8 @@ func PostStore(ctx *gin.Context) {
 // @Description 帖子详情
 // @Tags 帖子
 // @Produce  application/json
-// @Param Authorization header string true "Bearer 用户令牌"
 // @Param id path string true "帖子ID" default(3765906580705280)
 // @Success 200 {object} models.PostModel
-// @Security ApiKeyAuth
 // @Router /post/{id} [get]
 func PostShow(ctx *gin.Context) {
 	idStr := ctx.Param("id")
@@ -89,11 +87,9 @@ func PostShow(ctx *gin.Context) {
 // @Description 帖子列表
 // @Tags 帖子
 // @Produce  application/json
-// @Param Authorization header string true "Bearer 用户令牌"
 // @Param page query int true "页码" default(1)
 // @Param size query int true "每页大小" default(10)
 // @Success 200 {object} models.PostListDetail
-// @Security ApiKeyAuth
 // @Router /posts [get]
 func PostIndex(ctx *gin.Context) {
 	var param models.ParamPage
@@ -175,13 +171,11 @@ func PostVoteStore(ctx *gin.Context) {
 // @Description 可以根据发帖时间和帖子分数来获取帖子列表
 // @Tags 帖子
 // @Produce  application/json
-// @Param Authorization header string true "Bearer 用户令牌"
 // @Param page query int true "页码" default(1)
 // @Param size query int true "每页大小" default(10)
 // @Param order query string true "排序依据, time 时间 score 得分" default(time)
 // @Param sorts query string true "升序还是降序 asc 升序 desc 降序" default(asc)
 // @Success 200 {object} models.PostListDetail
-// @Security ApiKeyAuth
 // @Router /v2/posts [get]
 func NewPostsIndex(ctx *gin.Context) {
 	// 请求URL v2/posts?page=1&size=10&order=time&sorts=asc

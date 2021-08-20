@@ -102,11 +102,9 @@ func CategoryDetailHandler(ctx *gin.Context) {
 // @Description 获取某个社区下的所有帖子
 // @Tags 社区
 // @Produce  application/json
-// @Param Authorization header string true "Bearer 用户令牌"
 // @Param id path string true "社区ID" default(3730413906300928)
 // @Success 200 {object} _ResponseCommon
 // @Success 200 {object} models.PostModel
-// @Security ApiKeyAuth
 // @Router /category/{id}/posts [get]
 func GetCategoryIdPosts(ctx *gin.Context) {
 	idStr := ctx.Param("id")
